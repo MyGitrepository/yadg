@@ -68,6 +68,8 @@ public class DumbsterGUIView extends FrameView {
         progressBar = new javax.swing.JProgressBar();
         startButton = new javax.swing.JButton();
         stopButton = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        port = new javax.swing.JTextField();
 
         mainPanel.setName("mainPanel"); // NOI18N
 
@@ -93,7 +95,7 @@ public class DumbsterGUIView extends FrameView {
             mainPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(mainPanelLayout.createSequentialGroup()
                 .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 332, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 31, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 56, Short.MAX_VALUE)
                 .add(viewMailButton)
                 .addContainerGap())
         );
@@ -151,23 +153,39 @@ public class DumbsterGUIView extends FrameView {
             }
         });
 
+        jLabel1.setText(resourceMap.getString("jLabel1.text")); // NOI18N
+        jLabel1.setName("jLabel1"); // NOI18N
+
+        port.setText(resourceMap.getString("port.text")); // NOI18N
+        port.setName("port"); // NOI18N
+
         org.jdesktop.layout.GroupLayout statusPanelLayout = new org.jdesktop.layout.GroupLayout(statusPanel);
         statusPanel.setLayout(statusPanelLayout);
         statusPanelLayout.setHorizontalGroup(
             statusPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(statusPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .add(startButton)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(stopButton)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 118, Short.MAX_VALUE)
-                .add(progressBar, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(statusPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(statusPanelLayout.createSequentialGroup()
+                        .add(startButton)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(stopButton)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 163, Short.MAX_VALUE)
+                        .add(progressBar, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(statusPanelLayout.createSequentialGroup()
+                        .add(jLabel1)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                        .add(port, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 46, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         statusPanelLayout.setVerticalGroup(
             statusPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, statusPanelLayout.createSequentialGroup()
-                .addContainerGap(31, Short.MAX_VALUE)
+                .addContainerGap()
+                .add(statusPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabel1)
+                    .add(port, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .add(statusPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
                     .add(statusPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                         .add(stopButton)
@@ -181,18 +199,26 @@ public class DumbsterGUIView extends FrameView {
     }// </editor-fold>//GEN-END:initComponents
 
     private void startButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startButtonActionPerformed
-    server = SimpleSmtpServer.start();
-    progressBar.setIndeterminate(true);
-    startButton.setEnabled(false);
-    stopButton.setEnabled(true);
 
-    fetchMail.schedule(new TimerTask() {
-        public void run() {
-            int index = mails.getSelectedIndex();
-            populateList();
-            mails.setSelectedIndex(index);
+        try {
+            int portNum = Integer.parseInt(port.getText());
+            server = SimpleSmtpServer.start(portNum);
+        }catch (Exception e) {
+            server = SimpleSmtpServer.start();
         }
-    },1000, 5000);
+
+        progressBar.setIndeterminate(true);
+        startButton.setEnabled(false);
+        stopButton.setEnabled(true);
+        port.setEnabled(false);
+
+        fetchMail.schedule(new TimerTask() {
+            public void run() {
+                int index = mails.getSelectedIndex();
+                populateList();
+                mails.setSelectedIndex(index);
+            }
+        },1000, 5000);
 }//GEN-LAST:event_startButtonActionPerformed
 
     private void stopButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stopButtonActionPerformed
@@ -202,6 +228,7 @@ public class DumbsterGUIView extends FrameView {
     }
     stopButton.setEnabled(false);
     startButton.setEnabled(true);
+    port.setEnabled(true);
 
     fetchMail.cancel();
 }//GEN-LAST:event_stopButtonActionPerformed
@@ -209,7 +236,12 @@ public class DumbsterGUIView extends FrameView {
     private void viewMailButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewMailButtonActionPerformed
         // TODO add your handling code here:
         final int index = mails.getSelectedIndex();
-        if (index == -1) { return ;}
+        if (index == -1) {
+            MailData mailData = new MailData(this.getFrame(), true);
+            mailData.setMessage("<html><body><h1>HOLA!</h1><p>Que bonito es el compa&ntilde;erismo</p><br/><br/><br/><p>BUENOOOO!!!!</p><a href='http://www.google.com'>google</a></body></html>");
+            mailData.setVisible(true);
+          //  return ;
+        } else {
 
         SmtpMessage msg = mailList.get(index);
         MailData mailData = new MailData(this.getFrame(), true);
@@ -219,6 +251,7 @@ public class DumbsterGUIView extends FrameView {
         mailData.setSubject(msg.getHeaderValue("Subject"));
         mailData.setMessage(msg.getBody());
         mailData.setVisible(true);
+        }
     }//GEN-LAST:event_viewMailButtonActionPerformed
 
     private void populateList() {
@@ -236,10 +269,12 @@ public class DumbsterGUIView extends FrameView {
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JList mails;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JMenuBar menuBar;
+    private javax.swing.JTextField port;
     private javax.swing.JProgressBar progressBar;
     private javax.swing.JButton startButton;
     private javax.swing.JPanel statusPanel;

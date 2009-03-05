@@ -11,6 +11,8 @@
 
 package ar.com.gianazza.dumbster.gui;
 
+import javax.swing.text.html.HTMLEditorKit;
+
 /**
  *
  * @author gianu
@@ -21,6 +23,7 @@ public class MailData extends javax.swing.JDialog {
     public MailData(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        mailDataMessage.setEditable(false);
     }
 
     /** This method is called from within the constructor to
@@ -40,15 +43,16 @@ public class MailData extends javax.swing.JDialog {
         mailDataFrom = new javax.swing.JLabel();
         mailDataTo = new javax.swing.JLabel();
         mailDataDate = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        mailDataMessage = new javax.swing.JTextArea();
         jLabel5 = new javax.swing.JLabel();
         mailDataSubject = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        mailDataMessage = new javax.swing.JEditorPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(ar.com.gianazza.dumbster.gui.DumbsterGUIApp.class).getContext().getResourceMap(MailData.class);
+        setTitle(resourceMap.getString("Form.title")); // NOI18N
         setName("Form"); // NOI18N
 
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(ar.com.gianazza.dumbster.gui.DumbsterGUIApp.class).getContext().getResourceMap(MailData.class);
         okButton.setText(resourceMap.getString("okButton.text")); // NOI18N
         okButton.setName("okButton"); // NOI18N
         okButton.addActionListener(new java.awt.event.ActionListener() {
@@ -83,20 +87,18 @@ public class MailData extends javax.swing.JDialog {
         mailDataDate.setText(resourceMap.getString("mailDataDate.text")); // NOI18N
         mailDataDate.setName("mailDataDate"); // NOI18N
 
-        jScrollPane1.setName("jScrollPane1"); // NOI18N
-
-        mailDataMessage.setColumns(20);
-        mailDataMessage.setEditable(false);
-        mailDataMessage.setRows(5);
-        mailDataMessage.setName("mailDataMessage"); // NOI18N
-        jScrollPane1.setViewportView(mailDataMessage);
-
         jLabel5.setFont(resourceMap.getFont("jLabel5.font")); // NOI18N
         jLabel5.setText(resourceMap.getString("jLabel5.text")); // NOI18N
         jLabel5.setName("jLabel5"); // NOI18N
 
         mailDataSubject.setText(resourceMap.getString("mailDataSubject.text")); // NOI18N
         mailDataSubject.setName("mailDataSubject"); // NOI18N
+
+        jScrollPane1.setName("jScrollPane1"); // NOI18N
+
+        mailDataMessage.setEditorKit(new HTMLEditorKit());
+        mailDataMessage.setName("mailDataMessage"); // NOI18N
+        jScrollPane1.setViewportView(mailDataMessage);
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -109,12 +111,16 @@ public class MailData extends javax.swing.JDialog {
                     .add(layout.createSequentialGroup()
                         .add(jLabel1)
                         .add(18, 18, 18)
-                        .add(mailDataFrom, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 306, Short.MAX_VALUE))
+                        .add(mailDataFrom, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 326, Short.MAX_VALUE))
                     .add(layout.createSequentialGroup()
                         .add(jLabel2)
                         .add(39, 39, 39)
-                        .add(mailDataTo, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 304, Short.MAX_VALUE))
+                        .add(mailDataTo, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE))
                     .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING, false)
+                        .add(org.jdesktop.layout.GroupLayout.LEADING, layout.createSequentialGroup()
+                            .add(jLabel5)
+                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                            .add(jScrollPane1))
                         .add(org.jdesktop.layout.GroupLayout.LEADING, layout.createSequentialGroup()
                             .add(jLabel4)
                             .add(36, 36, 36)
@@ -124,14 +130,6 @@ public class MailData extends javax.swing.JDialog {
                             .add(37, 37, 37)
                             .add(mailDataDate, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 274, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
-            .add(layout.createSequentialGroup()
-                .add(100, 100, 100)
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE)
-                .add(35, 35, 35))
-            .add(layout.createSequentialGroup()
-                .addContainerGap()
-                .add(jLabel5)
-                .addContainerGap(324, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -148,19 +146,15 @@ public class MailData extends javax.swing.JDialog {
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jLabel3)
                     .add(mailDataDate))
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(layout.createSequentialGroup()
-                        .add(18, 18, 18)
-                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                            .add(jLabel4)
-                            .add(mailDataSubject))
-                        .add(29, 29, 29)
-                        .add(jLabel5)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 295, Short.MAX_VALUE))
-                    .add(layout.createSequentialGroup()
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 288, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)))
+                .add(18, 18, 18)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabel4)
+                    .add(mailDataSubject))
+                .add(29, 29, 29)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jLabel5)
+                    .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 299, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 14, Short.MAX_VALUE)
                 .add(okButton))
         );
 
@@ -182,7 +176,7 @@ public class MailData extends javax.swing.JDialog {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel mailDataDate;
     private javax.swing.JLabel mailDataFrom;
-    private javax.swing.JTextArea mailDataMessage;
+    private javax.swing.JEditorPane mailDataMessage;
     private javax.swing.JLabel mailDataSubject;
     private javax.swing.JLabel mailDataTo;
     private javax.swing.JButton okButton;
