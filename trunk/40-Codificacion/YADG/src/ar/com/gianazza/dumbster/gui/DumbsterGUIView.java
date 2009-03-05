@@ -236,12 +236,7 @@ public class DumbsterGUIView extends FrameView {
     private void viewMailButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewMailButtonActionPerformed
         // TODO add your handling code here:
         final int index = mails.getSelectedIndex();
-        if (index == -1) {
-            MailData mailData = new MailData(this.getFrame(), true);
-            mailData.setMessage("<html><body><h1>HOLA!</h1><p>Que bonito es el compa&ntilde;erismo</p><br/><br/><br/><p>BUENOOOO!!!!</p><a href='http://www.google.com'>google</a></body></html>");
-            mailData.setVisible(true);
-          //  return ;
-        } else {
+        if (index == -1) { return ; } 
 
         SmtpMessage msg = mailList.get(index);
         MailData mailData = new MailData(this.getFrame(), true);
@@ -251,7 +246,6 @@ public class DumbsterGUIView extends FrameView {
         mailData.setSubject(msg.getHeaderValue("Subject"));
         mailData.setMessage(msg.getBody());
         mailData.setVisible(true);
-        }
     }//GEN-LAST:event_viewMailButtonActionPerformed
 
     private void populateList() {
