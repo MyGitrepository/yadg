@@ -1,0 +1,1 @@
+This is a GUI for the fake smtp server Dumbster. YADG is simple, but useful in some situations.
